@@ -41,7 +41,7 @@
     .card h3 { margin: 0 0 0.5rem; color: var(--accent); }
     .card a { color: var(--accent); text-decoration: none; }
     .card a:hover { text-decoration: underline; }
-    .state-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.75rem; }
+    .state-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 0.75rem; }
     .state-link {
       display: block;
       background: var(--card);
@@ -53,6 +53,7 @@
       text-decoration: none;
     }
     .state-link:hover { border-color: var(--accent); }
+    .state-link small { display: block; color: var(--muted); font-size: 0.8rem; margin-top: 0.25rem; }
     footer { text-align: center; padding: 2rem 1.5rem; color: var(--muted); font-size: 0.9rem; border-top: 1px solid #334155; }
   </style>
 </head>
@@ -68,7 +69,7 @@
       <div class="cards">
         <div class="card">
           <h3>Housing</h3>
-          <p>VA loans, state-specific homebuyer programs, emergency rental assistance, and how to navigate the title and closing process without losing your mind.</p>
+          <p>VA loans, state-specific homebuyer programs, property tax exemptions, and how to navigate the title and closing process without losing your mind.</p>
         </div>
         <div class="card">
           <h3>School</h3>
@@ -76,7 +77,7 @@
         </div>
         <div class="card">
           <h3>Work</h3>
-          <p>Hiring programs, resume tips for transitioning out, and resources for finding work that fits your skills.</p>
+          <p>Hiring preferences, resume tips for transitioning out, and resources for finding work that fits your skills.</p>
         </div>
         <div class="card">
           <h3>Benefits & Discounts</h3>
@@ -87,10 +88,11 @@
 
     <section class="section">
       <h2>Pick your state</h2>
-      <p style="color: var(--muted); margin-bottom: 1rem;">Each state has different programs. Start with yours — more states get added as I find and verify them.</p>
+      <p style="color: var(--muted); margin-bottom: 1rem;">Each state has different programs. Start with yours — more states get added as resources are found and verified.</p>
       <div class="state-grid">
-        <a class="state-link" href="states/coming-soon.html">Your state here</a>
-        <a class="state-link" href="states/coming-soon.html">+ more soon</a>
+        <a class="state-link" href="states/new-hampshire.html">New Hampshire<small>Property tax credits, no income tax, free hunting/fishing</small></a>
+        <a class="state-link" href="states/florida.html">Florida<small>$5k tax exemption, tuition waivers, free park passes</small></a>
+        <a class="state-link" href="states/coming-soon.html">More states<small>Coming soon</small></a>
       </div>
     </section>
 
