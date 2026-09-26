@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Veteran Resources — Housing, School, Work & Benefits</title>
+  <meta name="description" content="Free, state-by-state resources for veterans: housing, school, work, benefits, and discounts. Built by a veteran, for veterans.">
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --accent: #38bdf8;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    header {
+      padding: 3rem 1.5rem 2rem;
+      text-align: center;
+      border-bottom: 1px solid #334155;
+    }
+    header h1 { margin: 0 0 0.5rem; font-size: 2rem; }
+    header p { margin: 0; color: var(--muted); max-width: 600px; margin: 0 auto; }
+    main { max-width: 800px; margin: 0 auto; padding: 2rem 1.5rem; }
+    .section { margin-bottom: 2.5rem; }
+    .section h2 { font-size: 1.4rem; border-left: 4px solid var(--accent); padding-left: 0.75rem; }
+    .cards { display: grid; gap: 1rem; }
+    .card {
+      background: var(--card);
+      border-radius: 10px;
+      padding: 1.25rem;
+      border: 1px solid #334155;
+    }
+    .card h3 { margin: 0 0 0.5rem; color: var(--accent); }
+    .card a { color: var(--accent); text-decoration: none; }
+    .card a:hover { text-decoration: underline; }
+    .state-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.75rem; }
+    .state-link {
+      display: block;
+      background: var(--card);
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      text-align: center;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .state-link:hover { border-color: var(--accent); }
+    footer { text-align: center; padding: 2rem 1.5rem; color: var(--muted); font-size: 0.9rem; border-top: 1px solid #334155; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Veteran Resources</h1>
+    <p>Housing, school, work, benefits, and discounts — organized by state, written by a veteran who needed them. No fluff, just the stuff that actually helps.</p>
+  </header>
+
+  <main>
+    <section class="section">
+      <h2>What you'll find here</h2>
+      <div class="cards">
+        <div class="card">
+          <h3>Housing</h3>
+          <p>VA loans, state-specific homebuyer programs, emergency rental assistance, and how to navigate the title and closing process without losing your mind.</p>
+        </div>
+        <div class="card">
+          <h3>School</h3>
+          <p>GI Bill details, state tuition waivers, scholarships, and what to do when your degree program isn't teaching you anything new.</p>
+        </div>
+        <div class="card">
+          <h3>Work</h3>
+          <p>Hiring programs, resume tips for transitioning out, and resources for finding work that fits your skills.</p>
+        </div>
+        <div class="card">
+          <h3>Benefits & Discounts</h3>
+          <p>What you're entitled to, state by state — healthcare, insurance, retail discounts, and the programs most people never hear about.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Pick your state</h2>
+      <p style="color: var(--muted); margin-bottom: 1rem;">Each state has different programs. Start with yours — more states get added as I find and verify them.</p>
+      <div class="state-grid">
+        <a class="state-link" href="states/coming-soon.html">Your state here</a>
+        <a class="state-link" href="states/coming-soon.html">+ more soon</a>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>About this site</h2>
+      <div class="card">
+        <p>I'm a veteran going through the same stuff — housing limbo, school that feels like review, figuring out what's next. This site is where I put what I learn and find, so you don't have to dig through the same bureaucracy alone.</p>
+        <p>If something's missing or wrong, <a href="mailto:kaiser6k@gmail.com">email me</a> and I'll fix it.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Built and maintained by a veteran. Free to use. Hosted on GitHub Pages.
+  </footer>
+</body>
+</html>
