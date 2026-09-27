@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Veteran Resources</title>
+  <title>After Service</title>
   <meta name="description" content="State snapshot and federal veteran resources.">
   <style>
     :root { --bg:#0f172a; --card:#1e293b; --accent:#38bdf8; --text:#e2e8f0; --muted:#94a3b8; --border:#334155; }
@@ -33,7 +33,7 @@
 </head>
 <body>
   <header>
-    <div class="nav"><a href="../index.html">&larr; Back to all states</a></div>
+    <div class="nav"><a href="../index.html">&larr; After Service</a></div>
   </header>
   <main id="app">
     <p class="subtitle">Loading state facts…</p>
@@ -43,7 +43,6 @@
     const slug = new URLSearchParams(location.search).get("s") || "";
     const detailed = { florida: "florida.html", "new-hampshire": "new-hampshire.html" };
     if (detailed[slug]) location.replace(detailed[slug]);
-
     fetch("../data/states.json")
       .then(r => r.json())
       .then(states => {
@@ -53,7 +52,7 @@
           app.innerHTML = '<h1>State not found</h1><p class="err">Pick a state from the <a href="../index.html">home page</a>.</p>';
           return;
         }
-        document.title = s.name + " Veteran Resources — Housing, School, Work & Benefits";
+        document.title = s.name + " — After Service";
         app.innerHTML =
           "<h1>" + s.name + "</h1>" +
           "<p class=\"subtitle\">" + s.nickname + " — veteran programs are being verified. Federal benefits below work here now.</p>" +
