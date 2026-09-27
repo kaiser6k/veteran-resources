@@ -4,107 +4,85 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>After Service — Find help in your state</title>
-  <meta name="description" content="Free, state-by-state resources for veterans: housing, school, work, benefits, and discounts. Click your state on the map or pick it from the list.">
+  <meta name="description" content="Free, state-by-state resources for veterans: housing, school, work, benefits, and discounts.">
   <style>
-    :root {
-      --bg: #0b1220; --bg-2: #111827; --card: #1e293b; --card-2: #243044;
-      --accent: #38bdf8; --accent-2: #7dd3fc; --gold: #fbbf24; --text: #e2e8f0;
-      --muted: #94a3b8; --border: #334155; --ok: #34d399;
-    }
+    :root { --bg:#0b1220; --bg-2:#111827; --card:#1e293b; --card-2:#243044; --accent:#38bdf8; --accent-2:#7dd3fc; --gold:#fbbf24; --text:#e2e8f0; --muted:#94a3b8; --border:#334155; }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
-      background: radial-gradient(1200px 500px at 50% -10%, #1e3a5f 0%, var(--bg) 55%);
-      color: var(--text); line-height: 1.55;
-    }
-    a { color: var(--accent); }
-    a:hover { color: var(--accent-2); }
-    .skip { position: absolute; left: -999px; top: 0; background: var(--accent); color: #0b1220; padding: .5rem 1rem; }
-    .skip:focus { left: 1rem; top: 1rem; z-index: 20; }
-    .topbar { display: flex; justify-content: space-between; align-items: center; gap: 1rem; max-width: 980px; margin: 0 auto; padding: .85rem 1.25rem; font-size: .9rem; color: var(--muted); }
-    .brand { display: flex; align-items: center; gap: .55rem; color: var(--text); text-decoration: none; font-weight: 700; }
-    .crisis { display: flex; align-items: center; gap: .4rem; background: #1e293b; border: 1px solid var(--border); border-radius: 999px; padding: .35rem .75rem; color: var(--text); text-decoration: none; white-space: nowrap; }
-    .crisis strong { color: var(--gold); }
-    header.hero { text-align: center; padding: 1.25rem 1.25rem 0; max-width: 760px; margin: 0 auto; }
-    header.hero h1 { font-size: clamp(1.7rem, 4vw, 2.4rem); margin: 0 0 .6rem; letter-spacing: -.02em; }
-    header.hero p { margin: 0 auto; color: var(--muted); max-width: 560px; }
-    main { max-width: 980px; margin: 0 auto; padding: 1.75rem 1.25rem 3rem; }
-    .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: .85rem; margin: 1.75rem 0 2rem; }
-    .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 1rem .95rem 1.05rem; }
-    .icon { width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; margin-bottom: .65rem; background: #16324a; color: var(--accent); }
-    .card h2 { font-size: 1rem; margin: 0 0 .35rem; }
-    .card p { margin: 0; color: var(--muted); font-size: .88rem; }
-    .picker { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 1.15rem 1.15rem 1.35rem; }
-    .picker h2 { margin: 0 0 .35rem; font-size: 1.25rem; }
-    .picker .lead { color: var(--muted); margin: 0 0 1rem; }
-    .map-wrap { display: none; position: relative; }
-    .map-canvas svg { width: 100%; height: auto; display: block; }
-    .state-shape { fill: #2a3b55; stroke: #0b1220; stroke-width: 1; cursor: pointer; transition: fill .15s ease; }
-    .state-shape:hover, .state-shape:focus { fill: var(--accent); outline: none; }
-    .state-shape.verified { fill: #0e7490; }
-    .state-shape.verified:hover, .state-shape.verified:focus { fill: #22d3ee; }
-    .state-shape.is-dc { cursor: default; fill: #334155; }
-    .legend { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: .85rem; color: var(--muted); font-size: .82rem; }
-    .swatch { display: inline-block; width: .75rem; height: .75rem; border-radius: 2px; margin-right: .35rem; vertical-align: -1px; }
-    .tip { position: absolute; pointer-events: none; background: #0b1220; color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: .4rem .6rem; font-size: .85rem; transform: translate(-50%, -120%); opacity: 0; z-index: 2; }
-    .tip.show { opacity: 1; }
-    .mobile-pick { display: block; }
-    label.field { display: block; font-weight: 600; margin-bottom: .4rem; }
-    .row { display: flex; gap: .6rem; }
-    select#state-select { flex: 1; min-height: 48px; font-size: 1rem; border-radius: 10px; border: 1px solid var(--border); background: var(--bg-2); color: var(--text); padding: 0 .75rem; }
-    button.go { min-height: 48px; min-width: 48px; padding: 0 1.1rem; border: 0; border-radius: 10px; background: var(--accent); color: #0b1220; font-weight: 700; font-size: 1rem; cursor: pointer; }
-    button.go:hover { background: var(--accent-2); }
-    .hint { margin: .65rem 0 0; color: var(--muted); font-size: .85rem; }
-    details.list { margin-top: 1rem; }
-    details.list summary { cursor: pointer; color: var(--accent); }
-    .state-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: .6rem; margin-top: .75rem; }
-    .state-link { display: block; background: var(--card-2); border: 1px solid var(--border); border-radius: 10px; padding: .65rem .75rem; text-align: left; color: var(--text); text-decoration: none; }
-    .state-link:hover { border-color: var(--accent); }
-    .state-link small { display: block; color: var(--muted); font-size: .78rem; margin-top: .15rem; }
-    .about { margin-top: 2rem; }
-    footer { text-align: center; padding: 1.5rem; color: var(--muted); font-size: .85rem; border-top: 1px solid var(--border); }
-    .branch-banner { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: linear-gradient(90deg, rgba(251,191,36,.08), transparent 18%, transparent 82%, rgba(56,189,248,.08)), repeating-linear-gradient(90deg, #0f1a2e 0 12px, #101c31 12px 24px); }
-    .branch-banner-inner { max-width: 980px; margin: 0 auto; padding: .85rem 1.25rem .95rem; }
-    .banner-kicker { margin: 0 0 .65rem; text-align: center; letter-spacing: .14em; text-transform: uppercase; font-size: .68rem; color: var(--gold); font-weight: 700; }
-    .branches { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(6, 1fr); gap: .55rem; }
-    .branch { display: flex; flex-direction: column; align-items: center; gap: .35rem; padding: .55rem .3rem .5rem; border-radius: 12px; background: rgba(15, 23, 42, .72); border: 1px solid var(--border); min-width: 0; }
-    .branch .mark { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; color: #f8fafc; }
-    .branch span { font-size: .68rem; font-weight: 650; letter-spacing: .02em; text-align: center; line-height: 1.2; color: var(--text); }
-    .branch.army .mark { background: #4b5320; }
-    .branch.marines .mark { background: #a6192e; }
-    .branch.navy .mark { background: #003b70; }
-    .branch.airforce .mark { background: #00308f; }
-    .branch.spaceforce .mark { background: #1b1464; }
-    .branch.coastguard .mark { background: #0a3d5c; }
-    @media (min-width: 800px) { .cards { grid-template-columns: repeat(4, 1fr); } .map-wrap { display: block; } .mobile-pick { display: none; } }
-    @media (max-width: 799px) { .cards { grid-template-columns: 1fr 1fr; } .topbar { padding-inline: 1rem; } .crisis span.full { display: none; } .branches { grid-template-columns: repeat(3, 1fr); } .branch-banner-inner { padding-inline: 1rem; } }
-    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .state-shape { transition: none; } }
+    body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; background:radial-gradient(1200px 500px at 50% -10%, #1e3a5f 0%, var(--bg) 55%); color:var(--text); line-height:1.55; }
+    a { color:var(--accent); } a:hover { color:var(--accent-2); }
+    .skip { position:absolute; left:-999px; top:0; background:var(--accent); color:#0b1220; padding:.5rem 1rem; }
+    .skip:focus { left:1rem; top:1rem; z-index:20; }
+    .topbar { display:flex; justify-content:space-between; align-items:center; gap:1rem; max-width:980px; margin:0 auto; padding:.85rem 1.25rem; font-size:.9rem; }
+    .brand { display:flex; align-items:center; gap:.55rem; color:var(--text); text-decoration:none; font-weight:700; }
+    .crisis { display:flex; align-items:center; gap:.4rem; background:#1e293b; border:1px solid var(--border); border-radius:999px; padding:.35rem .75rem; color:var(--text); text-decoration:none; white-space:nowrap; }
+    .crisis strong { color:var(--gold); }
+    header.hero { text-align:center; padding:1.25rem 1.25rem 0; max-width:760px; margin:0 auto; }
+    header.hero h1 { font-size:clamp(1.7rem,4vw,2.4rem); margin:0 0 .6rem; }
+    header.hero p { margin:0 auto; color:var(--muted); max-width:560px; }
+    main { max-width:980px; margin:0 auto; padding:1.75rem 1.25rem 3rem; }
+    .cards { display:grid; grid-template-columns:repeat(4,1fr); gap:.85rem; margin:1.75rem 0 1rem; }
+    .card { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:1rem .95rem; }
+    .icon { width:38px; height:38px; border-radius:10px; display:grid; place-items:center; margin-bottom:.65rem; background:#16324a; color:var(--accent); }
+    .card h2 { font-size:1rem; margin:0 0 .35rem; }
+    .card p { margin:0; color:var(--muted); font-size:.88rem; }
+    .picker { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:1.15rem; }
+    .picker h2 { margin:0 0 .35rem; font-size:1.25rem; }
+    .picker .lead { color:var(--muted); margin:0 0 1rem; }
+    .map-wrap { display:none; position:relative; }
+    .map-canvas svg { width:100%; height:auto; display:block; }
+    .state-shape { fill:#2a3b55; stroke:#0b1220; stroke-width:1; cursor:pointer; }
+    .state-shape:hover, .state-shape:focus { fill:var(--accent); outline:none; }
+    .state-shape.verified { fill:#0e7490; }
+    .state-shape.verified:hover { fill:#22d3ee; }
+    .state-shape.is-dc { cursor:default; fill:#334155; }
+    .legend { display:flex; gap:1rem; flex-wrap:wrap; margin-top:.85rem; color:var(--muted); font-size:.82rem; }
+    .swatch { display:inline-block; width:.75rem; height:.75rem; border-radius:2px; margin-right:.35rem; vertical-align:-1px; }
+    .tip { position:absolute; pointer-events:none; background:#0b1220; color:var(--text); border:1px solid var(--border); border-radius:8px; padding:.4rem .6rem; font-size:.85rem; transform:translate(-50%,-120%); opacity:0; }
+    .tip.show { opacity:1; }
+    .mobile-pick { display:block; }
+    label.field { display:block; font-weight:600; margin-bottom:.4rem; }
+    .row { display:flex; gap:.6rem; }
+    select#state-select { flex:1; min-height:48px; font-size:1rem; border-radius:10px; border:1px solid var(--border); background:var(--bg-2); color:var(--text); padding:0 .75rem; }
+    button.go { min-height:48px; padding:0 1.1rem; border:0; border-radius:10px; background:var(--accent); color:#0b1220; font-weight:700; cursor:pointer; }
+    .hint { margin:.65rem 0 0; color:var(--muted); font-size:.85rem; }
+    details.list { margin-top:1rem; }
+    details.list summary { cursor:pointer; color:var(--accent); }
+    .state-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:.6rem; margin-top:.75rem; }
+    .state-link { display:block; background:var(--card-2); border:1px solid var(--border); border-radius:10px; padding:.65rem .75rem; color:var(--text); text-decoration:none; }
+    .state-link small { display:block; color:var(--muted); font-size:.78rem; margin-top:.15rem; }
+    .about { margin-top:2rem; }
+    footer { text-align:center; padding:1.5rem; color:var(--muted); font-size:.85rem; border-top:1px solid var(--border); }
+    .branch-banner { border-top:1px solid var(--border); border-bottom:1px solid var(--border); background:linear-gradient(90deg, rgba(251,191,36,.08), transparent 18%, transparent 82%, rgba(56,189,248,.08)); }
+    .branch-banner-inner { max-width:980px; margin:0 auto; padding:.85rem 1.25rem; }
+    .banner-kicker { margin:0 0 .65rem; text-align:center; letter-spacing:.14em; text-transform:uppercase; font-size:.68rem; color:var(--gold); font-weight:700; }
+    .branches { list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(6,1fr); gap:.55rem; }
+    .branch { display:flex; flex-direction:column; align-items:center; gap:.35rem; padding:.55rem .3rem; border-radius:12px; background:rgba(15,23,42,.72); border:1px solid var(--border); }
+    .branch .mark { width:36px; height:36px; border-radius:50%; display:grid; place-items:center; color:#f8fafc; }
+    .branch span { font-size:.68rem; font-weight:650; text-align:center; }
+    .branch.army .mark { background:#4b5320; } .branch.marines .mark { background:#a6192e; }
+    .branch.navy .mark { background:#003b70; } .branch.airforce .mark { background:#00308f; }
+    .branch.spaceforce .mark { background:#1b1464; } .branch.coastguard .mark { background:#0a3d5c; }
+    @media (min-width:800px) { .map-wrap{display:block;} .mobile-pick{display:none;} }
+    @media (max-width:799px) { .cards{grid-template-columns:1fr 1fr;} .branches{grid-template-columns:repeat(3,1fr);} }
   </style>
 </head>
 <body>
   <a class="skip" href="#picker">Skip to state picker</a>
   <div class="topbar">
-    <a class="brand" href="./">
-      <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="#38bdf8" stroke-width="1.8"><path d="M12 2l2.2 6.6H21l-5.4 3.9 2.1 6.5L12 15.6 6.3 19l2.1-6.5L3 8.6h6.8L12 2z"/></svg>
-      After Service
-    </a>
-    <a class="crisis" href="https://www.veteranscrisisline.net" target="_blank" rel="noopener">
-      <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4m0 4h.01M10.3 3.3 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.3a2 2 0 0 0-3.4 0z"/></svg>
-      Crisis <strong>988</strong> <span class="full">then press 1</span>
-    </a>
+    <a class="brand" href="./">After Service</a>
+    <a class="crisis" href="https://www.veteranscrisisline.net" target="_blank" rel="noopener">Crisis <strong>988</strong> then 1</a>
   </div>
   <section class="branch-banner" aria-label="U.S. military branches">
     <div class="branch-banner-inner">
       <p class="banner-kicker">Every branch. Every state.</p>
       <ul class="branches">
-        <li class="branch army"><div class="mark" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l2.1 6.4H21l-5.4 3.9 2.1 6.4L12 16.2 6.3 19.7l2.1-6.4L3 9.4h6.9L12 3z"/></svg></div><span>Army</span></li>
-        <li class="branch marines"><div class="mark" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="11" r="5"/><path d="M12 3v3M8 20c1.2-2 2.6-3 4-3s2.8 1 4 3M4 12h2M18 12h2"/></svg></div><span>Marines</span></li>
-        <li class="branch navy"><div class="mark" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 4v14M8 8h8M7 20h10M12 18l-6-6h12l-6 6z"/></svg></div><span>Navy</span></li>
-        <li class="branch airforce"><div class="mark" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 4l8 16H4L12 4z"/><path d="M12 10v10"/></svg></div><span>Air Force</span></li>
-        <li class="branch spaceforce"><div class="mark" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l8 18H4L12 3z"/><circle cx="12" cy="14" r="2"/></svg></div><span>Space Force</span></li>
-        <li class="branch coastguard"><div class="mark" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="3"/><path d="M12 5v14M5 12h14"/></svg></div><span>Coast Guard</span></li>
+        <li class="branch army"><div class="mark" aria-hidden="true">&#9733;</div><span>Army</span></li>
+        <li class="branch marines"><div class="mark" aria-hidden="true">&#9678;</div><span>Marines</span></li>
+        <li class="branch navy"><div class="mark" aria-hidden="true">&#9875;</div><span>Navy</span></li>
+        <li class="branch airforce"><div class="mark" aria-hidden="true">&#9650;</div><span>Air Force</span></li>
+        <li class="branch spaceforce"><div class="mark" aria-hidden="true">&#10022;</div><span>Space Force</span></li>
+        <li class="branch coastguard"><div class="mark" aria-hidden="true">&#9675;</div><span>Coast Guard</span></li>
       </ul>
     </div>
   </section>
@@ -114,14 +92,15 @@
   </header>
   <main>
     <div class="cards">
-      <article class="card"><div class="icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11.5 12 4l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-8.5z"/></svg></div><h2>Housing</h2><p>VA loans, tax breaks, and homestead rules that change by state.</p></article>
-      <article class="card"><div class="icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 2 9 2 12 0v-5"/></svg></div><h2>School</h2><p>GI Bill plus state tuition waivers and dependent scholarships.</p></article>
-      <article class="card"><div class="icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M3 13h18"/></svg></div><h2>Work</h2><p>Hiring preference, workforce centers, and resume help after service.</p></article>
-      <article class="card"><div class="icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg></div><h2>Benefits</h2><p>Healthcare, plates, parks, and the programs most people never hear about.</p></article>
+      <article class="card"><h2>Housing</h2><p>VA loans, tax breaks, and homestead rules that change by state.</p></article>
+      <article class="card"><h2>School</h2><p>GI Bill plus state tuition waivers and dependent scholarships.</p></article>
+      <article class="card"><h2>Work</h2><p>Hiring preference and workforce help after service.</p></article>
+      <article class="card"><h2>Discounts</h2><p><a href="discounts.html">Home Depot, Lowe’s, Bass Pro, phone plans, parks pass</a></p></article>
     </div>
+    <p class="hint"><a href="discounts.html">Veteran discounts</a> at popular businesses, plus a free National Parks lifetime pass.</p>
     <section class="picker" id="picker">
       <h2>Pick your state</h2>
-      <p class="lead">On a phone, use the menu. On a larger screen, click the map. Living overseas? Use the Abroad guide.</p>
+      <p class="lead">On a phone, use the menu. On a larger screen, click the map.</p>
       <form class="mobile-pick" id="mobile-form">
         <label class="field" for="state-select">Your state</label>
         <div class="row">
@@ -131,104 +110,71 @@
           </select>
           <button class="go" type="submit">Go</button>
         </div>
-        <p class="hint">Florida and New Hampshire already have the full program list.</p>
+        <p class="hint">Every state has a benefits brief. Florida and New Hampshire have the longer guides.</p>
       </form>
       <div class="map-wrap" id="map-wrap">
         <div class="map-canvas" id="map" aria-label="Clickable map of the United States"></div>
         <div class="tip" id="tip" role="tooltip"></div>
         <div class="legend">
-          <span><i class="swatch" style="background:#0e7490"></i>Full guide ready</span>
-          <span><i class="swatch" style="background:#2a3b55"></i>Facts + federal links</span>
+          <span><i class="swatch" style="background:#0e7490"></i>Long guide (FL, NH)</span>
+          <span><i class="swatch" style="background:#2a3b55"></i>State brief + official office</span>
           <a href="abroad.html">Living abroad</a>
+          <a href="discounts.html">Discounts</a>
         </div>
       </div>
-      <p class="hint" style="margin-top:.85rem"><a href="abroad.html">Not on the map?</a> VA pay, the Foreign Medical Program, GI Bill at foreign schools, and overseas contacts.</p>
-      <details class="list"><summary>Browse states as a list</summary><div class="state-grid" id="states"></div></details>
     </section>
-    <section class="about">
-      <div class="card">
-        <h2>About this site</h2>
-        <p>I'm a veteran going through the same stuff — housing limbo, school that feels like review, figuring out what's next. This is where I put what I find so you don't have to dig through the same bureaucracy alone.</p>
-        <p>State facts come from the <a href="https://github.com/kaiser6k/us-states">us-states</a> notebook. Programs are added after they are checked against official sources.</p>
-        <p>If something's missing or wrong, <a href="mailto:kaiser6k@gmail.com">email me</a>.</p>
-      </div>
-    </section>
+    <section class="about"><div class="card">
+      <h2>About this site</h2>
+      <p>I'm a veteran going through the same stuff. This is where I put what I find so you don't have to dig alone.</p>
+      <p>If something's missing, <a href="mailto:kaiser6k@gmail.com">email me</a>.</p>
+    </div></section>
   </main>
-  <footer>Built by a veteran. Free to use. Map based on a blank U.S. states SVG (CC BY-SA 3.0).</footer>
+  <footer>After Service. Built by a veteran. Confirm details with the state office before you apply.</footer>
   <script>
     const detailed = { florida: "states/florida.html", "new-hampshire": "states/new-hampshire.html", abroad: "abroad.html" };
     const blurb = { florida: "Tax exemption, tuition waivers, park passes", "new-hampshire": "Property tax credits, no income tax" };
     const abbrToSlug = { AL:"alabama", AK:"alaska", AZ:"arizona", AR:"arkansas", CA:"california", CO:"colorado", CT:"connecticut", DE:"delaware", FL:"florida", GA:"georgia", HI:"hawaii", ID:"idaho", IL:"illinois", IN:"indiana", IA:"iowa", KS:"kansas", KY:"kentucky", LA:"louisiana", ME:"maine", MD:"maryland", MA:"massachusetts", MI:"michigan", MN:"minnesota", MS:"mississippi", MO:"missouri", MT:"montana", NE:"nebraska", NV:"nevada", NH:"new-hampshire", NJ:"new-jersey", NM:"new-mexico", NY:"new-york", NC:"north-carolina", ND:"north-dakota", OH:"ohio", OK:"oklahoma", OR:"oregon", PA:"pennsylvania", RI:"rhode-island", SC:"south-carolina", SD:"south-dakota", TN:"tennessee", TX:"texas", UT:"utah", VT:"vermont", VA:"virginia", WA:"washington", WV:"west-virginia", WI:"wisconsin", WY:"wyoming" };
     function hrefFor(slug) { return detailed[slug] || ("states/state.html?s=" + slug); }
-    function go(slug) { if (!slug) return; location.href = hrefFor(slug); }
+    function go(slug) { if (slug) location.href = hrefFor(slug); }
     fetch("data/states.json").then(r => r.json()).then(states => {
       const select = document.getElementById("state-select");
-      const grid = document.getElementById("states");
-      const abroadLink = document.createElement("a");
-      abroadLink.className = "state-link";
-      abroadLink.href = "abroad.html";
-      abroadLink.innerHTML = "Living abroad<small>FMP, GI Bill, overseas VA contacts</small>";
-      grid.appendChild(abroadLink);
+      const grid = document.createElement("div");
       states.forEach(s => {
         const opt = document.createElement("option");
         opt.value = s.slug;
-        opt.textContent = s.name + (detailed[s.slug] ? " — full guide" : "");
+        opt.textContent = s.name + (detailed[s.slug] ? " — full guide" : " — brief");
         select.appendChild(opt);
-        const a = document.createElement("a");
-        a.className = "state-link";
-        a.href = hrefFor(s.slug);
-        a.innerHTML = s.name + "<small>" + (blurb[s.slug] || (s.nickname + " \u00b7 " + s.capital)) + "</small>";
-        grid.appendChild(a);
       });
     });
-    document.getElementById("mobile-form").addEventListener("submit", (e) => { e.preventDefault(); go(document.getElementById("state-select").value); });
-    document.getElementById("state-select").addEventListener("change", (e) => { if (e.target.value) go(e.target.value); });
+    document.getElementById("mobile-form").addEventListener("submit", e => { e.preventDefault(); go(document.getElementById("state-select").value); });
+    document.getElementById("state-select").addEventListener("change", e => { if (e.target.value) go(e.target.value); });
     const tip = document.getElementById("tip");
     const mapSources = ["assets/us-map.svg", "https://cdn.jsdelivr.net/gh/kaldari/SVG-map-maker@master/Blank%20USA%20states%20only.svg"];
     function loadMap(i) {
       if (i >= mapSources.length) throw new Error("map missing");
-      return fetch(mapSources[i]).then(r => { if (!r.ok) return loadMap(i + 1); return r.text(); }).catch(() => loadMap(i + 1));
+      return fetch(mapSources[i]).then(r => r.ok ? r.text() : loadMap(i+1)).catch(() => loadMap(i+1));
     }
     loadMap(0).then(svg => {
-      svg = svg.replace(/fill="[^"]*"/g, 'class="state-shape"');
-      document.getElementById("map").innerHTML = svg;
+      document.getElementById("map").innerHTML = svg.replace(/fill="[^"]*"/g, 'class="state-shape"');
       const root = document.querySelector("#map svg");
       if (root) { root.removeAttribute("width"); root.removeAttribute("height"); if (!root.getAttribute("viewBox")) root.setAttribute("viewBox", "0 0 959 593"); }
       document.querySelectorAll("#map .state-shape").forEach(path => {
-        const abbr = path.id;
-        const slug = abbrToSlug[abbr];
-        if (abbr === "DC" || !slug) {
-          path.classList.add("is-dc");
-          path.setAttribute("aria-label", "Washington, DC — use VA.gov");
-          path.addEventListener("click", () => { location.href = "https://www.va.gov"; });
-          return;
-        }
+        const slug = abbrToSlug[path.id];
+        if (path.id === "DC" || !slug) { path.classList.add("is-dc"); path.addEventListener("click", () => location.href = "https://www.va.gov"); return; }
         if (detailed[slug]) path.classList.add("verified");
         path.setAttribute("tabindex", "0");
-        path.setAttribute("role", "link");
-        path.setAttribute("aria-label", slug.replace(/-/g, " "));
-        const open = () => go(slug);
-        path.addEventListener("click", open);
-        path.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); } });
-        path.addEventListener("pointerenter", (e) => {
-          const name = slug.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
-          tip.textContent = name + (detailed[slug] ? " \u00b7 full guide" : "");
+        path.addEventListener("click", () => go(slug));
+        path.addEventListener("pointerenter", e => {
+          const name = slug.replace(/-/g," ").replace(/\b\w/g, c => c.toUpperCase());
+          tip.textContent = name;
           const wrap = document.getElementById("map-wrap").getBoundingClientRect();
           tip.style.left = (e.clientX - wrap.left) + "px";
           tip.style.top = (e.clientY - wrap.top) + "px";
           tip.classList.add("show");
         });
-        path.addEventListener("pointermove", (e) => {
-          const wrap = document.getElementById("map-wrap").getBoundingClientRect();
-          tip.style.left = (e.clientX - wrap.left) + "px";
-          tip.style.top = (e.clientY - wrap.top) + "px";
-        });
         path.addEventListener("pointerleave", () => tip.classList.remove("show"));
       });
-    }).catch(() => {
-      document.getElementById("map-wrap").style.display = "none";
-      document.querySelector(".mobile-pick").style.display = "block";
-    });
+    }).catch(() => { document.getElementById("map-wrap").style.display = "none"; document.querySelector(".mobile-pick").style.display = "block"; });
   </script>
 </body>
 </html>
