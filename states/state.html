@@ -4,79 +4,79 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>After Service</title>
-  <meta name="description" content="State snapshot and federal veteran resources.">
   <style>
     :root { --bg:#0f172a; --card:#1e293b; --accent:#38bdf8; --text:#e2e8f0; --muted:#94a3b8; --border:#334155; }
     * { box-sizing: border-box; }
     body { margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
-    header { padding:2rem 1.5rem 1.5rem; border-bottom:1px solid var(--border); }
-    .nav { max-width:800px; margin:0 auto; }
+    header { padding:1.25rem 1.5rem; border-bottom:1px solid var(--border); }
+    .nav { max-width:800px; margin:0 auto; display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
     a { color:var(--accent); text-decoration:none; }
-    a:hover { text-decoration:underline; }
-    main { max-width:800px; margin:0 auto; padding:2rem 1.5rem; }
-    h1 { font-size:1.8rem; margin:0 0 .5rem; }
-    .subtitle { color:var(--muted); margin:0 0 1.5rem; }
-    .facts { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:.75rem; margin-bottom:1.5rem; }
+    main { max-width:800px; margin:0 auto; padding:1.5rem 1.5rem 2.5rem; }
+    h1 { font-size:1.8rem; margin:0 0 .4rem; }
+    .subtitle { color:var(--muted); margin:0 0 1.25rem; }
+    .facts { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:.75rem; margin-bottom:1.25rem; }
     .fact { background:var(--card); border:1px solid var(--border); border-radius:8px; padding:.75rem 1rem; }
     .fact dt { color:var(--muted); font-size:.72rem; text-transform:uppercase; letter-spacing:.04em; margin:0; }
     .fact dd { margin:.2rem 0 0; font-weight:600; }
     .known { grid-column:1 / -1; font-weight:400; }
-    .section { margin-bottom:2.5rem; }
-    .section h2 { font-size:1.3rem; border-left:4px solid var(--accent); padding-left:.75rem; margin-bottom:1rem; }
-    .card { background:var(--card); border-radius:10px; padding:1.25rem; border:1px solid var(--border); margin-bottom:1rem; }
-    .card h3 { margin:0 0 .5rem; color:var(--accent); font-size:1.1rem; }
-    .card p, .card ul { margin:0 0 .75rem; }
-    .callout { background:#1e3a5f; border:1px solid var(--accent); border-radius:8px; padding:1rem 1.25rem; margin-bottom:2rem; }
-    footer { text-align:center; padding:2rem 1.5rem; color:var(--muted); font-size:.9rem; border-top:1px solid var(--border); }
+    .card { background:var(--card); border-radius:10px; padding:1.15rem; border:1px solid var(--border); margin-bottom:.85rem; }
+    .card h2 { margin:0 0 .45rem; color:var(--accent); font-size:1.05rem; }
+    .card p { margin:0; }
+    .callout { background:#1e3a5f; border:1px solid var(--accent); border-radius:8px; padding:1rem 1.15rem; margin-bottom:1.25rem; }
+    footer { text-align:center; padding:1.5rem; color:var(--muted); font-size:.85rem; border-top:1px solid var(--border); }
     .err { color:#fca5a5; }
   </style>
 </head>
 <body>
   <header>
-    <div class="nav"><a href="../index.html">&larr; After Service</a></div>
+    <div class="nav">
+      <a href="../index.html">&larr; After Service</a>
+      <a href="../discounts.html">Veteran discounts</a>
+    </div>
   </header>
-  <main id="app">
-    <p class="subtitle">Loading state facts…</p>
-  </main>
-  <footer>State facts merged from the US States notebook. Confirm eligibility locally before applying. Crisis line: 988, press 1.</footer>
+  <main id="app"><p class="subtitle">Loading…</p></main>
+  <footer>Confirm amounts with the state veterans office before you apply. Crisis line: 988, press 1.</footer>
   <script>
     const slug = new URLSearchParams(location.search).get("s") || "";
     const detailed = { florida: "florida.html", "new-hampshire": "new-hampshire.html" };
     if (detailed[slug]) location.replace(detailed[slug]);
-    fetch("../data/states.json")
-      .then(r => r.json())
-      .then(states => {
-        const s = states.find(x => x.slug === slug);
-        const app = document.getElementById("app");
-        if (!s) {
-          app.innerHTML = '<h1>State not found</h1><p class="err">Pick a state from the <a href="../index.html">home page</a>.</p>';
-          return;
-        }
-        document.title = s.name + " — After Service";
-        app.innerHTML =
-          "<h1>" + s.name + "</h1>" +
-          "<p class=\"subtitle\">" + s.nickname + " — veteran programs are being verified. Federal benefits below work here now.</p>" +
-          "<dl class=\"facts\">" +
-            "<div class=\"fact\"><dt>Capital</dt><dd>" + s.capital + "</dd></div>" +
-            "<div class=\"fact\"><dt>Largest city</dt><dd>" + s.largest_city + "</dd></div>" +
-            "<div class=\"fact\"><dt>Nickname</dt><dd>" + s.nickname + "</dd></div>" +
-            "<div class=\"fact\"><dt>Admitted</dt><dd>" + s.admitted + "</dd></div>" +
-            "<div class=\"fact known\"><dt>Known for</dt><dd>" + s.known_for + "</dd></div>" +
-          "</dl>" +
-          "<div class=\"callout\"><strong>State-specific programs coming next.</strong> Housing, school, work, tax, and recreation benefits for " + s.name + " will be added the same way Florida and New Hampshire were — cited to statute and the state veterans office.</div>" +
-          "<section class=\"section\"><h2>Federal resources that work in " + s.name + "</h2>" +
-          "<div class=\"card\"><h3>VA benefits &amp; health care</h3><ul>" +
-          "<li><a href=\"https://www.va.gov\" target=\"_blank\" rel=\"noopener\">VA.gov</a> — claims, health care, records, and GI Bill</li>" +
-          "<li><a href=\"https://www.va.gov/find-locations/\" target=\"_blank\" rel=\"noopener\">Find a VA facility</a></li>" +
-          "<li><a href=\"https://www.va.gov/housing-assistance/home-loans/\" target=\"_blank\" rel=\"noopener\">VA home loan</a></li>" +
-          "<li><a href=\"https://www.va.gov/education/\" target=\"_blank\" rel=\"noopener\">GI Bill &amp; education</a></li></ul></div>" +
-          "<div class=\"card\"><h3>Crisis &amp; immediate help</h3><p>Veterans Crisis Line: call or text <strong>988</strong>, then press 1. Chat at <a href=\"https://www.veteranscrisisline.net\" target=\"_blank\" rel=\"noopener\">veteranscrisisline.net</a>.</p></div>" +
-          "<div class=\"card\"><h3>State veteran office</h3><p>Every state has a veterans department plus County Veteran Service Officers who file claims for free. Start at the <a href=\"https://www.va.gov/offices/veteran-state/\" target=\"_blank\" rel=\"noopener\">VA state offices directory</a> or search \"" + s.name + " veteran service officer\".</p></div></section>" +
-          "<section class=\"section\"><h2>See a finished example</h2><div class=\"card\"><p>Full verified programs are live for <a href=\"florida.html\">Florida</a> and <a href=\"new-hampshire.html\">New Hampshire</a>.</p></div></section>";
-      })
-      .catch(() => {
-        document.getElementById("app").innerHTML = '<p class="err">Could not load state data. Open this site over HTTPS from GitHub Pages.</p>';
-      });
+    Promise.all([
+      fetch("../data/states.json").then(r => r.json()),
+      fetch("../data/programs.json").then(r => r.json())
+    ]).then(([states, programs]) => {
+      const s = states.find(x => x.slug === slug);
+      const p = programs[slug];
+      const app = document.getElementById("app");
+      if (!s) {
+        app.innerHTML = '<h1>State not found</h1><p class="err">Pick a state from the <a href="../index.html">home page</a>.</p>';
+        return;
+      }
+      document.title = s.name + " — After Service";
+      const block = (title, text) => text ? "<article class=\"card\"><h2>" + title + "</h2><p>" + text + "</p></article>" : "";
+      app.innerHTML =
+        "<h1>" + s.name + "</h1>" +
+        "<p class=\"subtitle\">" + s.nickname + ". State programs below — then use the official office to file.</p>" +
+        "<dl class=\"facts\">" +
+          "<div class=\"fact\"><dt>Capital</dt><dd>" + s.capital + "</dd></div>" +
+          "<div class=\"fact\"><dt>Largest city</dt><dd>" + s.largest_city + "</dd></div>" +
+          "<div class=\"fact\"><dt>Admitted</dt><dd>" + s.admitted + "</dd></div>" +
+          "<div class=\"fact known\"><dt>Known for</dt><dd>" + s.known_for + "</dd></div>" +
+        "</dl>" +
+        (p ? "<div class=\"callout\"><strong>File with the state, not a random website.</strong> " +
+          (p.office_name ? p.office_name + " — " : "") +
+          "<a href=\"" + p.office + "\" target=\"_blank\" rel=\"noopener\">official site</a>.</div>" : "") +
+        (p ? block("Housing &amp; property tax", p.housing) +
+          block("Income tax", p.tax) +
+          block("School", p.school) +
+          block("Work", p.work) +
+          block("Licenses &amp; parks", p.recreation) +
+          block("Who to call", p.help) : "") +
+        "<article class=\"card\"><h2>Federal benefits that follow you here</h2><p><a href=\"https://www.va.gov\" target=\"_blank\" rel=\"noopener\">VA.gov</a> · <a href=\"https://www.va.gov/find-locations/\" target=\"_blank\" rel=\"noopener\">Find a VA facility</a> · <a href=\"https://www.va.gov/housing-assistance/home-loans/\" target=\"_blank\" rel=\"noopener\">VA home loan</a> · <a href=\"https://www.va.gov/education/\" target=\"_blank\" rel=\"noopener\">GI Bill</a></p></article>" +
+        "<article class=\"card\"><h2>National discounts</h2><p><a href=\"../discounts.html\">Home Depot, Lowe's, Bass Pro, phone plans, parks pass</a></p></article>" +
+        "<article class=\"card\"><h2>Crisis line</h2><p>Call or text <strong>988</strong>, then press 1.</p></article>";
+    }).catch(() => {
+      document.getElementById("app").innerHTML = '<p class="err">Could not load data. Open the site on GitHub Pages.</p>';
+    });
   </script>
 </body>
 </html>

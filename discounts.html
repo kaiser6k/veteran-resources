@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Veteran discounts — After Service</title>
+  <meta name="description" content="Year-round veteran discounts at popular businesses: Home Depot, Lowe's, Bass Pro, Under Armour, phone plans, parks pass, and Veterans Day meals.">
+  <style>
+    :root { --bg:#0b1220; --card:#1e293b; --accent:#38bdf8; --accent-2:#7dd3fc; --gold:#fbbf24; --text:#e2e8f0; --muted:#94a3b8; --border:#334155; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; background:#0b1220; color:var(--text); line-height:1.55; }
+    a { color: var(--accent); }
+    .topbar { display:flex; justify-content:space-between; align-items:center; gap:1rem; max-width:900px; margin:0 auto; padding:.85rem 1.25rem; }
+    .brand { color:var(--text); text-decoration:none; font-weight:700; }
+    .crisis { background:#1e293b; border:1px solid var(--border); border-radius:999px; padding:.35rem .75rem; color:var(--text); text-decoration:none; }
+    .crisis strong { color: var(--gold); }
+    main { max-width:900px; margin:0 auto; padding:1rem 1.25rem 3rem; }
+    h1 { font-size:clamp(1.6rem,4vw,2.1rem); margin:.3rem 0 .4rem; }
+    .lead { color:var(--muted); margin:0 0 1.25rem; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:.75rem; }
+    .card { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:1rem 1.05rem; }
+    .card h3 { margin:0 0 .35rem; font-size:1.02rem; }
+    .off { color:var(--gold); font-weight:700; font-size:.82rem; letter-spacing:.04em; text-transform:uppercase; }
+    .card p { margin:.35rem 0 0; color:#cbd5e1; font-size:.92rem; }
+    h2 { font-size:1.15rem; margin:1.6rem 0 .7rem; }
+    .note { color:var(--muted); border-left:3px solid var(--gold); padding-left:.75rem; margin-top:1.5rem; }
+    footer { text-align:center; padding:1.5rem; color:var(--muted); font-size:.85rem; border-top:1px solid var(--border); }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <a class="brand" href="./">← After Service</a>
+    <a class="crisis" href="https://www.veteranscrisisline.net" target="_blank" rel="noopener">Crisis <strong>988</strong> then 1</a>
+  </div>
+  <main>
+    <h1>Veteran discounts</h1>
+    <p class="lead">These are the national programs vets actually use. Amounts change, and some stores cap savings. Verify with ID.me, SheerID, or a veteran ID before you count on the number.</p>
+    <h2>Home and hardware</h2>
+    <div class="grid">
+      <article class="card"><p class="off">10% · cap $400/year</p><h3>Home Depot</h3><p>Everyday discount for veterans, active duty, and spouses after you enroll in the app and scan the QR code. Resets each January.</p></article>
+      <article class="card"><p class="off">10% everyday</p><h3>Lowe's</h3><p>Eligible purchases in store and online after ID.me. Often includes MyLowe's Silver perks and free delivery over $25.</p></article>
+      <article class="card"><p class="off">15% in store</p><h3>Sherwin-Williams</h3><p>Paint and supplies with a military or veteran ID. Ask at the counter.</p></article>
+    </div>
+    <h2>Outdoor and gear</h2>
+    <div class="grid">
+      <article class="card"><p class="off">10% most items</p><h3>Bass Pro Shops</h3><p>About 10% off most products, often 5% on firearms and ammo. Boats and some big-ticket items are excluded.</p></article>
+      <article class="card"><p class="off">10% most items</p><h3>Cabela's</h3><p>Same program as Bass Pro. Bring ID in store or verify online.</p></article>
+      <article class="card"><p class="off">20% online</p><h3>Under Armour</h3><p>Usually 20% at Brand House / online and 10% at Factory House after ID.me.</p></article>
+      <article class="card"><p class="off">10%</p><h3>Nike</h3><p>Online and in many stores after SheerID.</p></article>
+    </div>
+    <h2>Tech and phone</h2>
+    <div class="grid">
+      <article class="card"><p class="off">10%</p><h3>Apple</h3><p>Eligible products and accessories after ID.me.</p></article>
+      <article class="card"><p class="off">plan discount</p><h3>Verizon / AT&amp;T / T-Mobile</h3><p>Each carrier runs a military plan. Verify once with ID.me.</p></article>
+      <article class="card"><p class="off">~10%</p><h3>Dell and Microsoft</h3><p>PCs and accessories through their military storefronts.</p></article>
+    </div>
+    <h2>Food</h2>
+    <div class="grid">
+      <article class="card"><p class="off">often 10%</p><h3>Texas Roadhouse</h3><p>Many locations take 10% year-round. Franchise rules vary — ask first.</p></article>
+      <article class="card"><p class="off">Veterans Day</p><h3>Applebee's, Chili's, Olive Garden</h3><p>Free or discounted meals on November 11 from a limited menu.</p></article>
+      <article class="card"><p class="off">ask first</p><h3>Local diners</h3><p>A lot of restaurants still discount with a veteran ID. Never assume.</p></article>
+    </div>
+    <h2>Parks and tickets</h2>
+    <div class="grid">
+      <article class="card"><p class="off">free lifetime</p><h3>National Parks Military Pass</h3><p>Veterans and Gold Star families get a free America the Beautiful lifetime pass. Get it in person or through Recreation.gov / USGS.</p></article>
+      <article class="card"><p class="off">request tickets</p><h3>Vet Tix</h3><p>Free or cheap seats at games, concerts, and shows.</p></article>
+    </div>
+    <p class="note">Stores can drop a discount overnight. Confirm at the register. State park and plate discounts live on each state page.</p>
+  </main>
+  <footer>After Service · built by a veteran · confirm before you spend</footer>
+</body>
+</html>
