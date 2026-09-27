@@ -3,74 +3,343 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Veteran Resources — Housing, School, Work & Benefits</title>
-  <meta name="description" content="Free, state-by-state resources for veterans: housing, school, work, benefits, and discounts. Built by a veteran, for veterans.">
+  <title>Veteran Resources — Find help in your state</title>
+  <meta name="description" content="Free, state-by-state resources for veterans: housing, school, work, benefits, and discounts. Click your state on the map or pick it from the list.">
   <style>
-    :root { --bg:#0f172a; --card:#1e293b; --accent:#38bdf8; --text:#e2e8f0; --muted:#94a3b8; }
+    :root {
+      --bg: #0b1220;
+      --bg-2: #111827;
+      --card: #1e293b;
+      --card-2: #243044;
+      --accent: #38bdf8;
+      --accent-2: #7dd3fc;
+      --gold: #fbbf24;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --border: #334155;
+      --ok: #34d399;
+    }
     * { box-sizing: border-box; }
-    body { margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
-    header { padding:3rem 1.5rem 2rem; text-align:center; border-bottom:1px solid #334155; }
-    header h1 { margin:0 0 .5rem; font-size:2rem; }
-    header p { margin:0 auto; color:var(--muted); max-width:600px; }
-    main { max-width:800px; margin:0 auto; padding:2rem 1.5rem; }
-    .section { margin-bottom:2.5rem; }
-    .section h2 { font-size:1.4rem; border-left:4px solid var(--accent); padding-left:.75rem; }
-    .cards { display:grid; gap:1rem; }
-    .card { background:var(--card); border-radius:10px; padding:1.25rem; border:1px solid #334155; }
-    .card h3 { margin:0 0 .5rem; color:var(--accent); }
-    .card a { color:var(--accent); text-decoration:none; }
-    .card a:hover { text-decoration:underline; }
-    .state-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:.75rem; }
-    .state-link { display:block; background:var(--card); border:1px solid #334155; border-radius:8px; padding:.75rem 1rem; text-align:center; color:var(--text); text-decoration:none; }
-    .state-link:hover { border-color:var(--accent); }
-    .state-link small { display:block; color:var(--muted); font-size:.8rem; margin-top:.25rem; }
-    footer { text-align:center; padding:2rem 1.5rem; color:var(--muted); font-size:.9rem; border-top:1px solid #334155; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+      background: radial-gradient(1200px 500px at 50% -10%, #1e3a5f 0%, var(--bg) 55%);
+      color: var(--text);
+      line-height: 1.55;
+    }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-2); }
+    .skip {
+      position: absolute; left: -999px; top: 0;
+      background: var(--accent); color: #0b1220; padding: .5rem 1rem;
+    }
+    .skip:focus { left: 1rem; top: 1rem; z-index: 20; }
+    .topbar {
+      display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+      max-width: 980px; margin: 0 auto; padding: .85rem 1.25rem;
+      font-size: .9rem; color: var(--muted);
+    }
+    .brand { display: flex; align-items: center; gap: .55rem; color: var(--text); text-decoration: none; font-weight: 700; }
+    .brand svg { flex: 0 0 auto; }
+    .crisis {
+      display: flex; align-items: center; gap: .4rem;
+      background: #1e293b; border: 1px solid var(--border);
+      border-radius: 999px; padding: .35rem .75rem; color: var(--text); text-decoration: none;
+      white-space: nowrap;
+    }
+    .crisis strong { color: var(--gold); }
+    header.hero { text-align: center; padding: 1.25rem 1.25rem 0; max-width: 760px; margin: 0 auto; }
+    header.hero h1 { font-size: clamp(1.7rem, 4vw, 2.4rem); margin: 0 0 .6rem; letter-spacing: -.02em; }
+    header.hero p { margin: 0 auto; color: var(--muted); max-width: 560px; }
+    main { max-width: 980px; margin: 0 auto; padding: 1.75rem 1.25rem 3rem; }
+    .cards {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: .85rem; margin: 1.75rem 0 2rem;
+    }
+    .card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+      padding: 1rem .95rem 1.05rem;
+    }
+    .icon {
+      width: 38px; height: 38px; border-radius: 10px;
+      display: grid; place-items: center; margin-bottom: .65rem;
+      background: #16324a; color: var(--accent);
+    }
+    .card h2 { font-size: 1rem; margin: 0 0 .35rem; }
+    .card p { margin: 0; color: var(--muted); font-size: .88rem; }
+    .picker {
+      background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+      padding: 1.15rem 1.15rem 1.35rem;
+    }
+    .picker h2 { margin: 0 0 .35rem; font-size: 1.25rem; }
+    .picker .lead { color: var(--muted); margin: 0 0 1rem; }
+    .map-wrap { display: none; position: relative; }
+    .map-canvas svg { width: 100%; height: auto; display: block; }
+    .state-shape {
+      fill: #2a3b55; stroke: #0b1220; stroke-width: 1;
+      cursor: pointer; transition: fill .15s ease;
+    }
+    .state-shape:hover, .state-shape:focus { fill: var(--accent); outline: none; }
+    .state-shape.verified { fill: #0e7490; }
+    .state-shape.verified:hover, .state-shape.verified:focus { fill: #22d3ee; }
+    .state-shape.is-dc { cursor: default; fill: #334155; }
+    .legend { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: .85rem; color: var(--muted); font-size: .82rem; }
+    .swatch { display: inline-block; width: .75rem; height: .75rem; border-radius: 2px; margin-right: .35rem; vertical-align: -1px; }
+    .tip {
+      position: absolute; pointer-events: none; background: #0b1220; color: var(--text);
+      border: 1px solid var(--border); border-radius: 8px; padding: .4rem .6rem;
+      font-size: .85rem; transform: translate(-50%, -120%); opacity: 0; z-index: 2;
+    }
+    .tip.show { opacity: 1; }
+    .mobile-pick { display: block; }
+    label.field { display: block; font-weight: 600; margin-bottom: .4rem; }
+    .row { display: flex; gap: .6rem; }
+    select#state-select {
+      flex: 1; min-height: 48px; font-size: 1rem; border-radius: 10px;
+      border: 1px solid var(--border); background: var(--bg-2); color: var(--text);
+      padding: 0 .75rem;
+    }
+    button.go {
+      min-height: 48px; min-width: 48px; padding: 0 1.1rem; border: 0; border-radius: 10px;
+      background: var(--accent); color: #0b1220; font-weight: 700; font-size: 1rem; cursor: pointer;
+    }
+    button.go:hover { background: var(--accent-2); }
+    .hint { margin: .65rem 0 0; color: var(--muted); font-size: .85rem; }
+    details.list { margin-top: 1rem; }
+    details.list summary { cursor: pointer; color: var(--accent); }
+    .state-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: .6rem; margin-top: .75rem; }
+    .state-link {
+      display: block; background: var(--card-2); border: 1px solid var(--border);
+      border-radius: 10px; padding: .65rem .75rem; text-align: left; color: var(--text);
+      text-decoration: none;
+    }
+    .state-link:hover { border-color: var(--accent); }
+    .state-link small { display: block; color: var(--muted); font-size: .78rem; margin-top: .15rem; }
+    .about { margin-top: 2rem; }
+    footer { text-align: center; padding: 1.5rem; color: var(--muted); font-size: .85rem; border-top: 1px solid var(--border); }
+    @media (min-width: 800px) {
+      .cards { grid-template-columns: repeat(4, 1fr); }
+      .map-wrap { display: block; }
+      .mobile-pick { display: none; }
+    }
+    @media (max-width: 799px) {
+      .cards { grid-template-columns: 1fr 1fr; }
+      .topbar { padding-inline: 1rem; }
+      .crisis span.full { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .state-shape { transition: none; }
+    }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Veteran Resources</h1>
-    <p>Housing, school, work, benefits, and discounts — organized by state, written by a veteran who needed them. No fluff, just the stuff that actually helps.</p>
+  <a class="skip" href="#picker">Skip to state picker</a>
+  <div class="topbar">
+    <a class="brand" href="./">
+      <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="#38bdf8" stroke-width="1.8">
+        <path d="M12 2l2.2 6.6H21l-5.4 3.9 2.1 6.5L12 15.6 6.3 19l2.1-6.5L3 8.6h6.8L12 2z"/>
+      </svg>
+      Veteran Resources
+    </a>
+    <a class="crisis" href="https://www.veteranscrisisline.net" target="_blank" rel="noopener">
+      <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4m0 4h.01M10.3 3.3 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.3a2 2 0 0 0-3.4 0z"/></svg>
+      Crisis <strong>988</strong> <span class="full">then press 1</span>
+    </a>
+  </div>
+
+  <header class="hero">
+    <h1>Find the benefits that apply where you live</h1>
+    <p>Housing, school, work, and discounts — organized by state, written by a veteran who needed them. No fluff.</p>
   </header>
+
   <main>
-    <section class="section">
-      <h2>What you'll find here</h2>
-      <div class="cards">
-        <div class="card"><h3>Housing</h3><p>VA loans, state-specific homebuyer programs, property tax exemptions, and how to navigate the title and closing process without losing your mind.</p></div>
-        <div class="card"><h3>School</h3><p>GI Bill details, state tuition waivers, scholarships, and what to do when your degree program isn't teaching you anything new.</p></div>
-        <div class="card"><h3>Work</h3><p>Hiring preferences, resume tips for transitioning out, and resources for finding work that fits your skills.</p></div>
-        <div class="card"><h3>Benefits & Discounts</h3><p>What you're entitled to, state by state — healthcare, insurance, retail discounts, and the programs most people never hear about.</p></div>
-      </div>
-    </section>
-    <section class="section">
+    <div class="cards">
+      <article class="card">
+        <div class="icon" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11.5 12 4l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-8.5z"/></svg>
+        </div>
+        <h2>Housing</h2>
+        <p>VA loans, tax breaks, and homestead rules that change by state.</p>
+      </article>
+      <article class="card">
+        <div class="icon" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 2 9 2 12 0v-5"/></svg>
+        </div>
+        <h2>School</h2>
+        <p>GI Bill plus state tuition waivers and dependent scholarships.</p>
+      </article>
+      <article class="card">
+        <div class="icon" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M3 13h18"/></svg>
+        </div>
+        <h2>Work</h2>
+        <p>Hiring preference, workforce centers, and resume help after service.</p>
+      </article>
+      <article class="card">
+        <div class="icon" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg>
+        </div>
+        <h2>Benefits</h2>
+        <p>Healthcare, plates, parks, and the programs most people never hear about.</p>
+      </article>
+    </div>
+
+    <section class="picker" id="picker">
       <h2>Pick your state</h2>
-      <p style="color:var(--muted);margin-bottom:1rem;">Every state page has capital, largest city, nickname, and admission date. Florida and New Hampshire already have verified veteran programs. The rest include federal VA links while state statutes get checked.</p>
-      <div class="state-grid" id="states">Loading states…</div>
+      <p class="lead">On a phone, use the menu. On a larger screen, click the map.</p>
+
+      <form class="mobile-pick" id="mobile-form">
+        <label class="field" for="state-select">Your state</label>
+        <div class="row">
+          <select id="state-select" required>
+            <option value="">Choose a state…</option>
+          </select>
+          <button class="go" type="submit">Go</button>
+        </div>
+        <p class="hint">Florida and New Hampshire already have the full program list.</p>
+      </form>
+
+      <div class="map-wrap" id="map-wrap">
+        <div class="map-canvas" id="map" aria-label="Clickable map of the United States"></div>
+        <div class="tip" id="tip" role="tooltip"></div>
+        <div class="legend">
+          <span><i class="swatch" style="background:#0e7490"></i>Full guide ready</span>
+          <span><i class="swatch" style="background:#2a3b55"></i>Facts + federal links</span>
+        </div>
+      </div>
+
+      <details class="list">
+        <summary>Browse states as a list</summary>
+        <div class="state-grid" id="states"></div>
+      </details>
     </section>
-    <section class="section">
-      <h2>About this site</h2>
+
+    <section class="about">
       <div class="card">
-        <p>I'm a veteran going through the same stuff — housing limbo, school that feels like review, figuring out what's next. This site is where I put what I learn and find, so you don't have to dig through the same bureaucracy alone.</p>
-        <p>State facts come from the companion <a href="https://github.com/kaiser6k/us-states">us-states</a> notebook. Veteran programs are added as they are verified against official sources.</p>
-        <p>If something's missing or wrong, <a href="mailto:kaiser6k@gmail.com">email me</a> and I'll fix it.</p>
+        <h2>About this site</h2>
+        <p>I'm a veteran going through the same stuff — housing limbo, school that feels like review, figuring out what's next. This is where I put what I find so you don't have to dig through the same bureaucracy alone.</p>
+        <p>State facts come from the <a href="https://github.com/kaiser6k/us-states">us-states</a> notebook. Programs are added after they are checked against official sources.</p>
+        <p>If something's missing or wrong, <a href="mailto:kaiser6k@gmail.com">email me</a>.</p>
       </div>
     </section>
   </main>
-  <footer>Built and maintained by a veteran. Free to use. Hosted on GitHub Pages.</footer>
+
+  <footer>
+    Built by a veteran. Free to use. Map based on a blank U.S. states SVG (CC BY-SA 3.0).
+  </footer>
+
   <script>
-    const blurb = {
-      florida: "$5k tax exemption, tuition waivers, free park passes",
-      "new-hampshire": "Property tax credits, no income tax, free hunting/fishing"
-    };
     const detailed = { florida: "states/florida.html", "new-hampshire": "states/new-hampshire.html" };
+    const blurb = {
+      florida: "Tax exemption, tuition waivers, park passes",
+      "new-hampshire": "Property tax credits, no income tax"
+    };
+    const abbrToSlug = {
+      AL:"alabama", AK:"alaska", AZ:"arizona", AR:"arkansas", CA:"california", CO:"colorado",
+      CT:"connecticut", DE:"delaware", FL:"florida", GA:"georgia", HI:"hawaii", ID:"idaho",
+      IL:"illinois", IN:"indiana", IA:"iowa", KS:"kansas", KY:"kentucky", LA:"louisiana",
+      ME:"maine", MD:"maryland", MA:"massachusetts", MI:"michigan", MN:"minnesota",
+      MS:"mississippi", MO:"missouri", MT:"montana", NE:"nebraska", NV:"nevada",
+      NH:"new-hampshire", NJ:"new-jersey", NM:"new-mexico", NY:"new-york", NC:"north-carolina",
+      ND:"north-dakota", OH:"ohio", OK:"oklahoma", OR:"oregon", PA:"pennsylvania",
+      RI:"rhode-island", SC:"south-carolina", SD:"south-dakota", TN:"tennessee", TX:"texas",
+      UT:"utah", VT:"vermont", VA:"virginia", WA:"washington", WV:"west-virginia",
+      WI:"wisconsin", WY:"wyoming"
+    };
+
+    function hrefFor(slug) {
+      return detailed[slug] || ("states/state.html?s=" + slug);
+    }
+
+    function go(slug) {
+      if (!slug) return;
+      location.href = hrefFor(slug);
+    }
+
     fetch("data/states.json").then(r => r.json()).then(states => {
-      document.getElementById("states").innerHTML = states.map(s => {
-        const href = detailed[s.slug] || ("states/state.html?s=" + s.slug);
-        const extra = blurb[s.slug] || (s.nickname + " \u00b7 " + s.capital);
-        return '<a class="state-link" href="' + href + '">' + s.name + "<small>" + extra + "</small></a>";
-      }).join("");
+      const select = document.getElementById("state-select");
+      const grid = document.getElementById("states");
+      states.forEach(s => {
+        const opt = document.createElement("option");
+        opt.value = s.slug;
+        opt.textContent = s.name + (detailed[s.slug] ? " — full guide" : "");
+        select.appendChild(opt);
+        const a = document.createElement("a");
+        a.className = "state-link";
+        a.href = hrefFor(s.slug);
+        a.innerHTML = s.name + "<small>" + (blurb[s.slug] || (s.nickname + " \u00b7 " + s.capital)) + "</small>";
+        grid.appendChild(a);
+      });
+    });
+
+    document.getElementById("mobile-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      go(document.getElementById("state-select").value);
+    });
+    document.getElementById("state-select").addEventListener("change", (e) => {
+      if (e.target.value) go(e.target.value);
+    });
+
+    const tip = document.getElementById("tip");
+    const mapSources = [
+      "assets/us-map.svg",
+      "https://cdn.jsdelivr.net/gh/kaldari/SVG-map-maker@master/Blank%20USA%20states%20only.svg"
+    ];
+    function loadMap(i) {
+      if (i >= mapSources.length) throw new Error("map missing");
+      return fetch(mapSources[i]).then(r => {
+        if (!r.ok) return loadMap(i + 1);
+        return r.text();
+      }).catch(() => loadMap(i + 1));
+    }
+    loadMap(0).then(svg => {
+      svg = svg.replace(/fill="[^"]*"/g, 'class="state-shape"');
+      document.getElementById("map").innerHTML = svg;
+      const root = document.querySelector("#map svg");
+      if (root) {
+        root.removeAttribute("width");
+        root.removeAttribute("height");
+        if (!root.getAttribute("viewBox")) root.setAttribute("viewBox", "0 0 959 593");
+      }
+      document.querySelectorAll("#map .state-shape").forEach(path => {
+        const abbr = path.id;
+        const slug = abbrToSlug[abbr];
+        if (abbr === "DC" || !slug) {
+          path.classList.add("is-dc");
+          path.setAttribute("aria-label", "Washington, DC — use VA.gov");
+          path.addEventListener("click", () => {
+            location.href = "https://www.va.gov";
+          });
+          return;
+        }
+        if (detailed[slug]) path.classList.add("verified");
+        path.setAttribute("tabindex", "0");
+        path.setAttribute("role", "link");
+        path.setAttribute("aria-label", slug.replace(/-/g, " "));
+        const open = () => go(slug);
+        path.addEventListener("click", open);
+        path.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); }
+        });
+        path.addEventListener("pointerenter", (e) => {
+          const name = slug.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+          tip.textContent = name + (detailed[slug] ? " \u00b7 full guide" : "");
+          const wrap = document.getElementById("map-wrap").getBoundingClientRect();
+          tip.style.left = (e.clientX - wrap.left) + "px";
+          tip.style.top = (e.clientY - wrap.top) + "px";
+          tip.classList.add("show");
+        });
+        path.addEventListener("pointermove", (e) => {
+          const wrap = document.getElementById("map-wrap").getBoundingClientRect();
+          tip.style.left = (e.clientX - wrap.left) + "px";
+          tip.style.top = (e.clientY - wrap.top) + "px";
+        });
+        path.addEventListener("pointerleave", () => tip.classList.remove("show"));
+      });
     }).catch(() => {
-      document.getElementById("states").textContent = "Could not load state list.";
+      document.getElementById("map-wrap").style.display = "none";
+      document.querySelector(".mobile-pick").style.display = "block";
     });
   </script>
 </body>
