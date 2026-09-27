@@ -1,6 +1,6 @@
-# Veteran Resources
+# After Service
 
-Free, state-by-state resources for veterans: housing, school, work, benefits, and discounts.
+After Service is a free, state-by-state field guide for veterans: housing, school, work, benefits, and life abroad.
 
 This repo now includes the state snapshot data from [kaiser6k/us-states](https://github.com/kaiser6k/us-states) (capital, largest city, nickname, admission date, notable fact) on every state page.
 
@@ -9,6 +9,7 @@ This repo now includes the state snapshot data from [kaiser6k/us-states](https:/
 - [Home](index.html)
 - Full verified programs: [Florida](states/florida.html), [New Hampshire](states/new-hampshire.html)
 - All 50 states have a page with facts + federal VA links
+- [Living abroad](abroad.html)
 
 ## Data
 
